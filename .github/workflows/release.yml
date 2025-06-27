@@ -1,34 +1,49 @@
-name: Build and Publish Ballista Image
+name: Build and Release Python Client
 
 on:
   push:
-    branches: [main]
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
     steps:
-      - name: Checkout
+      - name: Checkout client repo
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to GHCR
-        uses: docker/login-action@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          python-version: '3.10'
 
-      - name: Build and Push
-        uses: docker/build-push-action@v5
+      - name: Install deps
+        run: |
+          pip install grpcio-tools hatch
+
+      - name: Fetch proto files from Apache Ballista
+        run: |
+          git clone --depth=1 https://github.com/apache/datafusion-ballista.git /tmp/ballista
+          mkdir -p pyballista/protosrc
+          cp /tmp/ballista/ballista/proto/*.proto pyballista/protosrc/
+
+      - name: Compile proto files
+        run: |
+          mkdir -p pyballista/proto
+          python -m grpc_tools.protoc \
+            -I pyballista/protosrc \
+            --python_out=pyballista/proto \
+            --grpc_python_out=pyballista/proto \
+            pyballista/protosrc/*.proto
+
+      - name: Fix relative imports
+        run: |
+          sed -i 's/^import \(.*_pb2\)/from . import \1/' pyballista/proto/*_pb2_grpc.py
+
+      - name: Build package
+        run: hatch build
+
+      - name: Upload to GitHub Releases
+        uses: softprops/action-gh-release@v1
         with:
-          context: .
-          push: true
-          tags: ghcr.io/ruffin-galactic/ballista:latest
-          platforms: linux/amd64
+          files: dist/*.whl
