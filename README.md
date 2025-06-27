@@ -1,4 +1,3 @@
-
 # PyBallista
 
 A modern Python gRPC client for [Apache Ballista](https://github.com/apache/datafusion-ballista), a distributed SQL query engine built on Apache Arrow and DataFusion.
