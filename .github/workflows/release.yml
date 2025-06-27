@@ -2,7 +2,7 @@ name: Build and Release Python Client
 
 on:
   push:
-    tags:
+    branches:
       - main
 
 jobs:
