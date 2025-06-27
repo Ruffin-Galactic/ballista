@@ -25,7 +25,7 @@ jobs:
         run: |
           git clone --depth=1 https://github.com/apache/datafusion-ballista.git /tmp/ballista
           mkdir -p pyballista/protosrc
-          cp /tmp/ballista/proto/*.proto pyballista/protosrc/
+          cp /tmp/ballista/ballista/core/proto/*.proto pyballista/protosrc/
 
       - name: Compile proto files
         run: |
