@@ -20,3 +20,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["pyballista", "pyballista.proto"]
+
+[tool.hatch.build]
+include = ["pyballista/**/*.py"]
