@@ -31,6 +31,7 @@ jobs:
       - name: Compile proto files
         run: |
           mkdir -p pyballista/proto
+          touch pyballista/proto/__init__.py
           python -m grpc_tools.protoc \
             -I pyballista/protosrc \
             --python_out=pyballista/proto \
