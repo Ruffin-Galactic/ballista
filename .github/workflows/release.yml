@@ -40,9 +40,10 @@ jobs:
           echo "Listing compiled files:"
           ls -l pyballista/proto
 
-      - name: Fix relative imports
+      - name: Fix relative imports in *_pb2 and *_pb2_grpc
         run: |
-          sed -i 's/^import \(.*_pb2\)/from . import \1/' pyballista/proto/*_pb2_grpc.py
+          sed -i 's/^import \(.*_pb2\)/from . import \1/' pyballista/proto/*_pb2*.py
+
 
       - name: Build package
         run: hatch build
