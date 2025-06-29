@@ -1,6 +1,6 @@
 import grpc
-from pyballista.proto import scheduler_pb2_grpc
-from pyballista.proto import scheduler_pb2
+import pyballista.proto.scheduler_pb2_grpc as scheduler_pb2_grpc
+import pyballista.proto.scheduler_pb2 as scheduler_pb2
 
 class BallistaClient:
     def __init__(self, host="localhost", port=50050):
