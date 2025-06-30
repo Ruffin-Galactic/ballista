@@ -37,7 +37,8 @@ jobs:
             --python_out=pyballista/proto \
             --grpc_python_out=pyballista/proto \
             pyballista/protosrc/ballista.proto \
-            pyballista/protosrc/datafusion.proto
+            pyballista/protosrc/datafusion.proto \
+            pyballista/protosrc/datafusion_common.proto
           echo "Listing compiled files:"
           ls -l pyballista/proto
 
